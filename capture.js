@@ -1,7 +1,8 @@
 (function () {
   const script = document.currentScript;
   const endpoint =
-    script.dataset.endpoint || "https://api.crm360online.com/leads/inbound";
+    script.dataset.endpoint ||
+    "https://crm-vertical-saas.onrender.com/api/v1/pipeline/deals";
   const source = script.dataset.source || window.location.hostname;
   const selector = script.dataset.selector || "form";
   const debug = script.dataset.debug === "true";
