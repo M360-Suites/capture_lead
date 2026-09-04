@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Lead Capture — one tag, every form</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            :root {
+                --bg: #eef1f4;
+                --panel: #e4e9ec;
+                --ink: #1c2530;
+                --ink-soft: #56636f;
+                --line: #c7cdd3;
+                --accent: #e8a33d;
+                --accent-soft: #f6d9a6;
+                --teal: #3f8f82;
+                --white: #fbfcfd;
+                --radius: 10px;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                background: var(--bg);
+                color: var(--ink);
+                font-family: "IBM Plex Sans", sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .wrap {
+                max-width: 1180px;
+                margin: 0 auto;
+                padding: 0 32px;
+            }
+
+            /* ---------- nav ---------- */
+            nav.wrap {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-top: 28px;
+                padding-bottom: 28px;
+            }
+            .wordmark {
+                font-family: "Fraunces", serif;
+                font-size: 20px;
+                font-weight: 600;
+                letter-spacing: -0.01em;
+            }
+            .wordmark span {
+                color: var(--ink-soft);
+                font-weight: 400;
+            }
+            .navlinks {
+                display: flex;
+                gap: 28px;
+            }
+            .navlinks a {
+                color: var(--ink-soft);
+                text-decoration: none;
+                font-size: 14.5px;
+            }
+            .navlinks a:hover {
+                color: var(--ink);
+            }
+
+            /* ---------- hero ---------- */
+            .hero {
+                display: grid;
+                grid-template-columns: 1.05fr 0.95fr;
+                gap: 56px;
+                align-items: center;
+                padding: 40px 0 76px;
+            }
+
+            h1 {
+                font-family: "Fraunces", serif;
+                font-weight: 500;
+                font-size: clamp(34px, 4vw, 50px);
+                line-height: 1.14;
+                letter-spacing: -0.01em;
+                margin: 0 0 22px;
+                max-width: 15ch;
+            }
+
+            .sub {
+                font-size: 17px;
+                line-height: 1.6;
+                color: var(--ink-soft);
+                max-width: 46ch;
+                margin: 0 0 34px;
+            }
+
+            .snippet {
+                background: var(--ink);
+                border-radius: var(--radius);
+                padding: 18px 20px;
+                position: relative;
+                margin-bottom: 22px;
+            }
+            .snippet pre {
+                margin: 0;
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 12.8px;
+                line-height: 1.65;
+                color: #d7dee3;
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+            .snippet .tag {
+                color: #e8a33d;
+            }
+            .snippet .attr {
+                color: #8fb8b0;
+            }
+            .snippet .val {
+                color: #c9d6dc;
+            }
+
+            .copy-btn {
+                position: absolute;
+                top: 14px;
+                right: 14px;
+                background: transparent;
+                border: 1px solid #3a4653;
+                color: #d7dee3;
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 11.5px;
+                padding: 5px 10px;
+                border-radius: 6px;
+                cursor: pointer;
+                transition:
+                    border-color 0.15s ease,
+                    color 0.15s ease;
+            }
+            .copy-btn:hover {
+                border-color: var(--accent);
+                color: var(--accent-soft);
+            }
+            .copy-btn:focus-visible {
+                outline: 2px solid var(--accent);
+                outline-offset: 2px;
+            }
+
+            .ctas {
+                display: flex;
+                align-items: center;
+                gap: 22px;
+            }
+            .btn-primary {
+                background: var(--ink);
+                color: var(--white);
+                border: none;
+                padding: 12px 20px;
+                border-radius: 7px;
+                font-size: 14.5px;
+                font-weight: 500;
+                cursor: pointer;
+                font-family: inherit;
+            }
+            .btn-primary:hover {
+                background: #2b3844;
+            }
+            .btn-primary:focus-visible {
+                outline: 2px solid var(--accent);
+                outline-offset: 2px;
+            }
+            .link-quiet {
+                color: var(--ink-soft);
+                font-size: 14.5px;
+                text-decoration: none;
+                border-bottom: 1px solid var(--line);
+            }
+            .link-quiet:hover {
+                color: var(--ink);
+                border-color: var(--ink-soft);
+            }
+
+            /* ---------- visual ---------- */
+            .stage {
+                position: relative;
+                height: 400px;
+            }
+
+            .site-window {
+                position: absolute;
+                left: 0;
+                top: 8px;
+                width: 250px;
+                background: var(--white);
+                border: 1px solid var(--line);
+                border-radius: 9px;
+                box-shadow: 0 1px 0 rgba(28, 37, 48, 0.03);
+                overflow: hidden;
+            }
+            .site-window .bar {
+                height: 26px;
+                background: var(--panel);
+                border-bottom: 1px solid var(--line);
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                padding: 0 10px;
+            }
+            .site-window .bar i {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: #c7cdd3;
+                display: block;
+            }
+            .site-window .body {
+                padding: 16px 16px 18px;
+            }
+            .site-window .field {
+                height: 9px;
+                border-radius: 3px;
+                background: var(--panel);
+                margin-bottom: 10px;
+                width: 100%;
+            }
+            .site-window .field.short {
+                width: 60%;
+            }
+            .site-window .label {
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 9px;
+                color: var(--ink-soft);
+                margin-bottom: 4px;
+                display: block;
+            }
+            .site-window .send {
+                margin-top: 4px;
+                background: var(--ink);
+                color: var(--white);
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 10.5px;
+                padding: 6px 12px;
+                border-radius: 5px;
+                display: inline-block;
+            }
+
+            .crm-card {
+                position: absolute;
+                right: 0;
+                bottom: 4px;
+                width: 258px;
+                background: var(--ink);
+                border-radius: 9px;
+                padding: 16px 18px 18px;
+            }
+            .crm-card .title {
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 10px;
+                color: var(--teal);
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .crm-card .title .dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: var(--teal);
+                display: inline-block;
+            }
+            .crm-card .row {
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 11.5px;
+                color: #d7dee3;
+                line-height: 1.9;
+                opacity: 0;
+                transform: translateY(3px);
+            }
+            .crm-card .row b {
+                color: #8fb8b0;
+                font-weight: 400;
+            }
+            .crm-card.reveal .row {
+                animation: rowIn 0.5s ease forwards;
+            }
+            .crm-card.reveal .row:nth-child(1) {
+                animation-delay: 1.05s;
+            }
+            .crm-card.reveal .row:nth-child(2) {
+                animation-delay: 1.3s;
+            }
+            .crm-card.reveal .row:nth-child(3) {
+                animation-delay: 1.55s;
+            }
+            .crm-card.reveal .row:nth-child(4) {
+                animation-delay: 1.8s;
+            }
+
+            @keyframes rowIn {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            svg.wire {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: visible;
+            }
+            .wire path {
+                fill: none;
+                stroke: var(--line);
+                stroke-width: 1.5;
+                stroke-dasharray: 4 5;
+            }
+            .pulse {
+                r: 4;
+                fill: var(--accent);
+                opacity: 0;
+            }
+            .stage.play .pulse {
+                animation: travel 1s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+                animation-delay: 0.2s;
+            }
+            @keyframes travel {
+                0% {
+                    opacity: 0;
+                    offset-distance: 0%;
+                }
+                8% {
+                    opacity: 1;
+                }
+                92% {
+                    opacity: 1;
+                }
+                100% {
+                    opacity: 0;
+                    offset-distance: 100%;
+                }
+            }
+            .wire .travel-path {
+                offset-path: path("M 122 172 C 200 172, 210 300, 300 300");
+            }
+
+            /* ---------- process strip ---------- */
+            .process {
+                border-top: 1px solid var(--line);
+                padding: 44px 0 60px;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 40px;
+            }
+            .step .num {
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 12px;
+                color: var(--accent);
+                margin-bottom: 10px;
+            }
+            .step h3 {
+                font-family: "Fraunces", serif;
+                font-weight: 500;
+                font-size: 18px;
+                margin: 0 0 8px;
+            }
+            .step p {
+                font-size: 14px;
+                line-height: 1.6;
+                color: var(--ink-soft);
+                margin: 0;
+                max-width: 32ch;
+            }
+
+            @media (max-width: 860px) {
+                .hero {
+                    grid-template-columns: 1fr;
+                    padding-top: 8px;
+                }
+                .stage {
+                    height: 340px;
+                }
+                .process {
+                    grid-template-columns: 1fr;
+                    gap: 28px;
+                }
+                nav.wrap {
+                    padding-top: 20px;
+                }
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .crm-card .row {
+                    opacity: 1;
+                    transform: none;
+                    animation: none;
+                }
+                .pulse {
+                    display: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="wrap">
+            <div class="wordmark">leadwire<span>.js</span></div>
+            <div class="navlinks">
+                <a href="#">Docs</a>
+                <a href="#">Backend response</a>
+                <a href="#">Pricing</a>
+            </div>
+        </nav>
+
+        <header class="hero wrap">
+            <div>
+                <h1>
+                    Every form is already collecting leads. Now they land in
+                    your CRM.
+                </h1>
+                <p class="sub">
+                    Drop one script tag into any site — yours, a client's, one
+                    you've never touched — and every form submission is sent
+                    straight into your pipeline, unread by no one.
+                </p>
+
+                <div class="snippet">
+                    <button class="copy-btn" id="copyBtn">Copy</button>
+                    <pre><span class="tag">&lt;script</span>
+  <span class="attr">src</span>=<span class="val">"https://cdn.crm360online.com/lead-capture.js"</span>
+  <span class="attr">data-endpoint</span>=<span class="val">"https://api.crm360online.com/leads/inbound"</span>
+  <span class="attr">data-source</span>=<span class="val">"client-site"</span>
+  <span class="attr">data-selector</span>=<span class="val">"#contact-form"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/script&gt;</span></pre>
+                </div>
+
+                <div class="ctas">
+                    <button class="btn-primary" id="ctaCopy">
+                        Copy the script tag
+                    </button>
+                    <a class="link-quiet" href="#"
+                        >See what the backend receives</a
+                    >
+                </div>
+            </div>
+
+            <div class="stage" id="stage">
+                <svg class="wire" viewBox="0 0 350 380">
+                    <path d="M 122 172 C 200 172, 210 300, 300 300"></path>
+                    <circle class="pulse travel-path"></circle>
+                </svg>
+
+                <div class="site-window">
+                    <div class="bar"><i></i><i></i><i></i></div>
+                    <div class="body">
+                        <span class="label">name</span>
+                        <div class="field"></div>
+                        <span class="label">email</span>
+                        <div class="field"></div>
+                        <span class="label">message</span>
+                        <div class="field short"></div>
+                        <span class="send">Send</span>
+                    </div>
+                </div>
+
+                <div class="crm-card" id="crmCard">
+                    <div class="title">
+                        <span class="dot"></span>leads/inbound
+                    </div>
+                    <div class="row"><b>name</b>&nbsp; Adaeze Okafor</div>
+                    <div class="row"><b>email</b>&nbsp; adaeze@example.com</div>
+                    <div class="row"><b>source</b>&nbsp; client-site</div>
+                    <div class="row"><b>status</b>&nbsp; new</div>
+                </div>
+            </div>
+        </header>
+
+        <section class="process wrap">
+            <div class="step">
+                <div class="num">01</div>
+                <h3>Drop in the tag</h3>
+                <p>
+                    Paste one script tag before the closing body tag, or fire it
+                    through a plugin's custom script area.
+                </p>
+            </div>
+            <div class="step">
+                <div class="num">02</div>
+                <h3>A customer submits</h3>
+                <p>
+                    Their form works exactly as it did before — nothing about
+                    the site's own logic changes.
+                </p>
+            </div>
+            <div class="step">
+                <div class="num">03</div>
+                <h3>The lead lands in your CRM</h3>
+                <p>
+                    Fields are mapped, tagged with their source site, and
+                    dropped into your pipeline in real time.
+                </p>
+            </div>
+        </section>
+
+        <script>
+            function playAnimation() {
+                const stage = document.getElementById("stage");
+                const card = document.getElementById("crmCard");
+                stage.classList.remove("play");
+                card.classList.remove("reveal");
+                void stage.offsetWidth;
+                stage.classList.add("play");
+                setTimeout(() => card.classList.add("reveal"), 50);
+            }
+
+            const reduce = window.matchMedia(
+                "(prefers-reduced-motion: reduce)",
+            ).matches;
+            if (!reduce) {
+                window.addEventListener("load", () =>
+                    setTimeout(playAnimation, 300),
+                );
+            } else {
+                document.getElementById("crmCard").classList.add("reveal");
+            }
+
+            const snippetText =
+                document.querySelector(".snippet pre").innerText;
+            function copySnippet(btn) {
+                navigator.clipboard.writeText(snippetText).then(() => {
+                    const original = btn.textContent;
+                    btn.textContent =
+                        btn === document.getElementById("copyBtn")
+                            ? "Copied"
+                            : "Copied";
+                    setTimeout(() => {
+                        btn.textContent = original;
+                    }, 1600);
+                });
+            }
+            document
+                .getElementById("copyBtn")
+                .addEventListener("click", function () {
+                    copySnippet(this);
+                });
+            document
+                .getElementById("ctaCopy")
+                .addEventListener("click", function () {
+                    copySnippet(this);
+                    playAnimation();
+                });
+        </script>
+    </body>
+</html>
